@@ -9,7 +9,10 @@ const usersRouter= require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const bracketRouter = require('./controllers/brackets')
 
-const scheduleRouter = require('./controllers/schedule')
+const scheduleRouter = require('./controllers/schedule').scheduleRouter
+const teamRouter = require('./controllers/schedule').teamRouter
+const groupRouter = require('./controllers/schedule').groupRouter
+const knockoutRouter =  require('./controllers/schedule').knockoutRouter
 const config = require('./utils/config')
 
 
@@ -29,6 +32,9 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/brackets', bracketRouter)
 app.use('/api/schedule', scheduleRouter)
+app.use('/api/groups', groupRouter)
+app.use('/api/teams', teamRouter)
+app.use('/api/knockout', knockoutRouter)
 
 
 const server = http.createServer(app)
