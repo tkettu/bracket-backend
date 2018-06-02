@@ -8,6 +8,8 @@ const mongoose = require('mongoose')
 const usersRouter= require('./controllers/users') 
 const loginRouter = require('./controllers/login')
 const bracketRouter = require('./controllers/brackets')
+
+const scheduleRouter = require('./controllers/schedule')
 const config = require('./utils/config')
 
 
@@ -26,6 +28,7 @@ app.use(bodyParser.json())
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/brackets', bracketRouter)
+app.use('/api/schedule', scheduleRouter)
 
 
 const server = http.createServer(app)
