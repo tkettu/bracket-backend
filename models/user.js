@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   username: String,
   name: String,
   passwordHash: String,
-  brackets: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Bracket' }]
+  bracket: { type: mongoose.Schema.Types.ObjectId, ref: 'Bracket' }
 })
 
 userSchema.statics.format = (user) => {
@@ -12,7 +12,7 @@ userSchema.statics.format = (user) => {
     id: user.id,
     username: user.username,
     name: user.name,
-    brackets: user.brackets
+    bracket: user.bracket
   }
 }
 

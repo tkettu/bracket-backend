@@ -23,7 +23,6 @@ const getTokenFrom = (request) => {
 
 bracketRouter.post('/', async (request, response) => {
   const body = request.body
-  console.log(body)
   
   try {
     const token = getTokenFrom(request)
@@ -35,25 +34,24 @@ bracketRouter.post('/', async (request, response) => {
 
     //Todo put empty bracket [] here, read from minidata if not put
     if (body.bracket === undefined) {
-      return response.status(400).json({ error: 'Title or Url missing' })
+      return response.status(400).json({ error: 'Bracket missing' })
     }
     
     let _bracket
     if (body.bracket === ''){
-      console.log('Adding empty bracket')
+      return response.status(400).json({ error: 'Bracket is empty' })
+      //console.log('Adding empty bracket')
       //NOT GONNA PUT EMPTY FOR ALL USERS
-      fs.readFile('./data/minidata.json', function(err, data) {
+      /*fs.readFile('./data/minidata.json', function(err, data) {
         if (err) throw err
         _bracket = JSON.parse(data)
         
-      })
+      })*/
     }else{
       _bracket = body.bracket
     }
     const user = await User.findById(decodedToken.id)
-    console.log('TANNE')
-    console.log(_bracket)
-  
+    
     const bracket = new Bracket({
       bracket: _bracket,
       user: user._id
