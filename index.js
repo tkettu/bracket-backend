@@ -4,8 +4,7 @@ const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
-//bodyparser
-const usersRouter= require('./controllers/users') 
+const usersRouter= require('./controllers/users')
 const loginRouter = require('./controllers/login')
 const bracketRouter = require('./controllers/brackets')
 

@@ -6,12 +6,15 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "watch": "cross-env NODE_ENV=development nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose",
+    "eslint": "node_modules/.bin/eslint --init"
   },
   "author": "Tero Kettunen",
   "license": "MIT",
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
     "cross-env": "^5.1.6",
+    "eslint": "^4.19.1",
     "jest": "^23.0.1",
     "nodemon": "^1.17.5",
     "supertest": "^3.1.0"
