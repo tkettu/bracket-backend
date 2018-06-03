@@ -17,7 +17,6 @@ const subRequest = (res, subpart) => {
   }, function (error, response, body) {
 
     if (!error && response.statusCode === 200) {
-      console.log(body)
       switch (subpart) {
       case 'teams':
         res.json(body.teams)

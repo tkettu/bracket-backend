@@ -23,7 +23,6 @@ const getTokenFrom = (request) => {
 
 bracketRouter.post('/', async (request, response) => {
   const body = request.body
-  console.log(body)
   
   try {
     const token = getTokenFrom(request)
@@ -52,9 +51,7 @@ bracketRouter.post('/', async (request, response) => {
       _bracket = body.bracket
     }
     const user = await User.findById(decodedToken.id)
-    console.log('TANNE')
-    console.log(_bracket)
-  
+    
     const bracket = new Bracket({
       bracket: _bracket,
       user: user._id
