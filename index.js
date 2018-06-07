@@ -14,6 +14,10 @@ const groupRouter = require('./controllers/schedule').groupRouter
 const knockoutRouter =  require('./controllers/schedule').knockoutRouter
 const config = require('./utils/config')
 
+const morgan = require('morgan')
+morgan.token('data', function getData (res){return JSON.stringify(res.body)})
+app.use(morgan('tiny'))
+app.use(morgan(':data'))
 
 mongoose
   .connect(config.mongoUrl)

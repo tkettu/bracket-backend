@@ -81,6 +81,36 @@ describe('Adding users', async () => {
   })
 })
 
+describe('User logging ', async () => {
+  beforeAll(async () => {
+    await User.remove({})
+    const user = { username: 'Roki', name: 'Toki', password: 'salsana' }
+    await api
+      .post('/api/users')
+      .send(user)
+  })
+
+  test('POST correct login credentials', async () => {
+
+    const usersBefore = await usersInDb()
+    console.log(usersBefore.length)
+
+    const userLogging = {
+      username: 'Roki',
+      password: 'salsana'
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(userLogging)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.username).toBe(userLogging.username)
+
+  })
+})
+
 afterAll(() => {
   server.close()
 })
