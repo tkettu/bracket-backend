@@ -4,15 +4,6 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 //const fs = require('fs')
 
-bracketRouter.get('/', async (request, response) => {
-  //Get only user bracket
-  const brackets = await Bracket
-    .find({})
-
-  response.json(brackets)
-})
-
-
 const getTokenFrom = (request) => {
   const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -20,6 +11,31 @@ const getTokenFrom = (request) => {
   }
   return null
 }
+
+bracketRouter.get('/', async (request, response) => {
+  //Get only user bracket
+  try {
+    const token = getTokenFrom(request)
+    const decodedToken =  jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const brackets = await Bracket
+      .find({ user : decodedToken.id })
+
+    response.json(brackets)
+  } catch(exception){
+    if (exception.name === 'JsonWebTokenError' ) {
+      response.status(401).json({ error: exception.message })
+    } else {
+      console.log(exception)
+      response.status(500).json({ error: 'something went wrong...' })
+    }
+  }
+
+})
 
 bracketRouter.post('/', async (request, response) => {
   const body = request.body
@@ -51,14 +67,23 @@ bracketRouter.post('/', async (request, response) => {
       _bracket = body.bracket
     }
     const user = await User.findById(decodedToken.id)
+    console.log(user.bracket)
+
+    if (user.bracket) {
+      return response.status(400).json({ error: 'Bracket already saved, update old' })
+    }
 
     const bracket = new Bracket({
       bracket: _bracket,
       user: user._id
     })
+    console.log('TALLENNETAAN', bracket)
 
     const savedBracket = await bracket.save()
-    user.brackets = user.brackets.concat(savedBracket._id)
+
+    user.bracket = savedBracket._id
+    console.log('NYT USeRIN BRaqKeT ', user.bracket)
+
     await user.save()
 
     response.json(savedBracket)
@@ -71,5 +96,7 @@ bracketRouter.post('/', async (request, response) => {
     }
   }
 })
+
+//bracketRouter.put //Update bracket
 
 module.exports = bracketRouter

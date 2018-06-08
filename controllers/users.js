@@ -33,6 +33,7 @@ usersRouter.post('/', async (request, response) => {
 
     const savedUser = await user.save()
 
+
     response.json(savedUser)
   } catch (exception) {
     console.log(exception)
