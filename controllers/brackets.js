@@ -97,6 +97,19 @@ bracketRouter.post('/', async (request, response) => {
   }
 })
 
+bracketRouter.put('/:id', async (request, response) => {
+
+  const bracket = request.body
+  console.log('UPDATING WITH', bracket)
+
+  try {
+    const updatedBracket = await Bracket.findByIdAndUpdate(request.params.id, bracket)
+    response.json(updatedBracket)
+  } catch (error) {
+    console.log(error)
+    response.status(400).send({ error: 'malformatted id' })
+  }
+})
 //bracketRouter.put //Update bracket
 
 module.exports = bracketRouter

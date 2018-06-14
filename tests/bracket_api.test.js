@@ -3,8 +3,9 @@ const { app, server } = require('../index')
 const api = supertest(app)
 
 const User = require('../models/user')
+const Bracket = require('../models/user')
 
-const { usersInDb, newBracket, bracketsInDb } = require('./test_helper')
+const { usersInDb, newBracket, bracketsInDb, updatedBracket } = require('./test_helper')
 
 describe('Adding users', async () => {
   beforeAll(async () => {
@@ -113,12 +114,14 @@ describe('User logging ', async () => {
 
 describe.only('Brackets', async () => {
   beforeAll(async () => {
+    await Bracket.remove({})
     await User.remove({})
     const user = { username: 'Roki', name: 'Toki', password: 'salsana' }
     await api
       .post('/api/users')
       .send(user)
 
+    //await Bracket.remove({})
     /* await api
       .post('/api/login')
       .send({ username: 'Roki', password: 'salsana' }) */
@@ -138,11 +141,21 @@ describe.only('Brackets', async () => {
   })
 
   test('POST  empty bracket ', async () => {
+    const userLogging = {
+      username: 'Roki',
+      password: 'salsana'
+    }
 
     const loggedUser = await api
       .post('/api/login')
-      .send({ username: 'Roki', password: 'salsana' })
+      .send(userLogging)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
+    /* const loggedUser = await api
+      .post('/api/login')
+      .send({ username: 'Roki', password: 'salsana' })
+ */
     console.log(loggedUser.body)
 
     console.log(`bearer ${loggedUser.body.token}`)
@@ -206,6 +219,32 @@ describe.only('Brackets', async () => {
 
     console.log(result.body)
 
+  })
+
+  test('PUT updated bracket ', async () => {
+    const loggedUser = await api
+      .post('/api/login')
+      .send({ username: 'Roki', password: 'salsana' })
+
+    const bracket = await api
+      .get('/api/brackets')
+      .set('Authorization', `bearer ${loggedUser.body.token}`)
+    
+    console.log(bracket.body[0]._id)
+      
+    const updateBracket = await api
+      .put(`/api/brackets/${bracket.body[0]._id}`)
+      .send(updatedBracket)
+      .expect(200)
+   
+    console.log(updateBracket.body.bracket)
+    
+    const _newBracket = await api
+      .get('/api/brackets')
+      .set('Authorization', `bearer ${loggedUser.body.token}`)
+
+    console.log(_newBracket.body)
+    expect(updateBracket.body.bracket).toEqual(_newBracket.body[0].bracket)
   })
 
 })

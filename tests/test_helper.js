@@ -29,6 +29,29 @@ const newBracket = [
   }
 ]
 
+const updatedBracket = [
+  {
+    'game':1,
+    'home':2,
+    'away':1
+  },
+  {
+    'game':2,
+    'home':1,
+    'away':2
+  },
+  {
+    'game':3,
+    'home':2,
+    'away':1
+  },
+  {
+    'game':4,
+    'home':5,
+    'away':4
+  }
+]
+
 module.exports = {
-  usersInDb, newBracket, bracketsInDb
+  usersInDb, newBracket, bracketsInDb, updatedBracket
 }
